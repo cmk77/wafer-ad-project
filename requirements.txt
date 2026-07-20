@@ -1,0 +1,33 @@
+# ===== 트랙 B: 비전 이상탐지 =====
+anomalib>=2.1.0        # Dinomaly 포함(v2.1+), PatchCore/EfficientAD/WinCLIP 등 통합, Apache-2.0
+torch>=2.4
+torchvision
+timm>=1.0              # DINOv2 임베딩 (DefectTypeRegistry)
+openvino               # (선택) 엣지/CPU 배포
+
+# ===== 데이터 =====
+pandas>=2.0,<3          # LSWMD.pkl(2017년산 피클) 호환 - pandas 3은 레거시 피클 지원 제거
+numpy
+opencv-python
+scikit-learn
+pillow
+matplotlib
+tqdm
+pyyaml
+kaggle                 # WM-811K 다운로드용 CLI
+
+# ===== Gemma 4 + QLoRA =====
+transformers>=4.57     # Gemma 4 지원 버전(설치 시 최신 확인)
+accelerate
+bitsandbytes>=0.44     # 4bit NF4
+peft>=0.13
+trl>=0.12
+datasets
+sentencepiece
+
+# ===== 온톨로지 =====
+networkx
+rdflib                 # OWL/RDF 확장 시
+
+# ===== 서빙(선택) =====
+# vllm                 # Gemma 4 지원 버전으로 별도 설치 (환경 충돌 방지 위해 별도 venv 권장)

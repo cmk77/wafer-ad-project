@@ -1,0 +1,20 @@
+# 가상환경/캐시
+venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# 자격증명 — 절대 업로드 금지
+kaggle.json
+
+# 데이터셋 전체 (WM-811K 등 공개 데이터는 scripts/download_datasets.sh로 재현.
+# 사내 실데이터(fab_real 등)는 어떤 경우에도 업로드 금지 — demo/samples만 저장소 포함)
+datasets/
+
+# 실험 산출물/로그 — 실데이터 파생 리포트·추론 결과 포함, 업로드 금지
+results/
+waferproject_*.log
+*.log
+
+# 사내 데이터 파생 문서 — 업로드 금지
+docs/fab_format_notes.md

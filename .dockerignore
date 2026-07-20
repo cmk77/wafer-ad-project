@@ -1,0 +1,8 @@
+# 화이트리스트 방식: 이미지에 필요한 것만 빌드 컨텍스트에 포함
+*
+!src
+!demo
+!models
+!data
+!README.md
+src/__pycache__

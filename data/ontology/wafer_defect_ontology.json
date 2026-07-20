@@ -1,0 +1,161 @@
+{
+  "_comment": "웨이퍼 결함 온톨로지 시드. 사내 공정/장비 지식으로 확장하세요. 확장 시 rdflib(OWL) 또는 Neo4j 이관 권장.",
+  "defect_types": {
+    "scratch": {
+      "label_ko": "스크래치",
+      "signature": "선형/곡선형 연속 불량 다이 궤적",
+      "process_steps": ["cmp", "wafer_handling", "cleaning"],
+      "root_causes": ["패드 이물", "핸들링 암 접촉", "브러시 손상"],
+      "actions": ["CMP 패드/슬러리 점검", "로봇 티칭 재확인", "세정 브러시 교체"],
+      "severity": "high",
+      "related": ["particle"]
+    },
+    "center": {
+      "label_ko": "센터 집중",
+      "signature": "웨이퍼 중심부 원형 클러스터",
+      "process_steps": ["deposition", "etch", "spin_coating"],
+      "root_causes": ["척 중심 온도 이상", "가스 분사 불균일", "스핀 코팅 불량"],
+      "actions": ["척 온도 프로파일 점검", "샤워헤드 상태 확인"],
+      "severity": "medium",
+      "related": ["donut"]
+    },
+    "donut": {
+      "label_ko": "도넛(환형)",
+      "signature": "중심을 비운 환형 불량 분포",
+      "process_steps": ["deposition", "anneal"],
+      "root_causes": ["플라즈마 링 불균일", "온도 링 프로파일 이상"],
+      "actions": ["존별 히터 캘리브레이션", "포커스 링 마모 점검"],
+      "severity": "medium",
+      "related": ["center", "edge_ring"]
+    },
+    "edge_ring": {
+      "label_ko": "에지 링",
+      "signature": "웨이퍼 외곽 전체 둘레 링",
+      "process_steps": ["etch", "deposition", "edge_bead_removal"],
+      "root_causes": ["에지 배제 폭 설정 오류", "포커스 링 마모", "EBR 노즐 위치"],
+      "actions": ["EBR 레시피 확인", "포커스 링 교체 주기 점검"],
+      "severity": "medium",
+      "related": ["edge_loc"]
+    },
+    "edge_loc": {
+      "label_ko": "에지 국부",
+      "signature": "가장자리 일부 구간 국부 클러스터",
+      "process_steps": ["wafer_handling", "etch"],
+      "root_causes": ["에지 그립 접촉 손상", "국부 아킹"],
+      "actions": ["엔드이펙터 패드 점검", "챔버 내벽 상태 확인"],
+      "severity": "medium",
+      "related": ["edge_ring", "local"]
+    },
+    "local": {
+      "label_ko": "국부 클러스터",
+      "signature": "임의 위치 소규모 클러스터",
+      "process_steps": ["photolithography", "deposition"],
+      "root_causes": ["국부 파티클 낙하", "레티클 국부 결함"],
+      "actions": ["파티클 모니터링 강화", "레티클 검사"],
+      "severity": "medium",
+      "related": ["particle"]
+    },
+    "random": {
+      "label_ko": "랜덤 분포",
+      "signature": "전면 무작위 산포",
+      "process_steps": ["cleaning", "environment"],
+      "root_causes": ["클린룸 파티클 레벨 상승", "케미컬 오염"],
+      "actions": ["파티클 카운트 추적", "케미컬 필터 점검"],
+      "severity": "low",
+      "related": []
+    },
+    "near_full": {
+      "label_ko": "전면 불량",
+      "signature": "웨이퍼 대부분 불량",
+      "process_steps": ["any"],
+      "root_causes": ["공정 파라미터 대이탈", "장비 알람 미감지 진행"],
+      "actions": ["해당 로트 즉시 홀드", "장비 인터락 로그 확인"],
+      "severity": "critical",
+      "related": []
+    },
+    "particle": {
+      "label_ko": "파티클",
+      "signature": "점 형태 이물 (표면 검사 이미지)",
+      "process_steps": ["deposition", "etch", "environment"],
+      "root_causes": ["챔버 플레이킹", "펌프 역류", "FOUP 오염"],
+      "actions": ["챔버 시즈닝/클리닝", "FOUP 세정 주기 점검"],
+      "severity": "medium",
+      "related": ["scratch", "local"]
+    },
+    "open_short_cluster": {
+      "label_ko": "OS(오픈/쇼트) fail 군집",
+      "aliases": ["os", "os_fail", "bin2", "open_short", "오픈쇼트"],
+      "signature": "웨이퍼 테스트 OS 사인(bin '2') 다이의 국부/군집 분포 — 콘택 계열",
+      "process_steps": ["wafer_test", "wafer_handling"],
+      "root_causes": ["프로브 니들 오염/마모", "프로브카드 평탄도·정렬 불량", "패드 손상/이물", "OD(오버드라이브) 부적정"],
+      "actions": ["니들 클리닝 후 리테스트로 회복률 확인", "프로브카드 평탄도/정렬 점검", "패드 프로브 마크 현미경 확인", "OD·콘택 파라미터 재설정"],
+      "severity": "high",
+      "related": ["site_dependent", "retest_recovery", "scratch"]
+    },
+    "trim_fail_cluster": {
+      "label_ko": "TRIM fail 군집",
+      "aliases": ["trim", "bin5", "트림"],
+      "signature": "TRIM 사인(bin '5') 다이 다발 — 트리밍/리페어 계열",
+      "process_steps": ["wafer_test", "laser_trim"],
+      "root_causes": ["레이저 트림 장비 편차", "퓨즈 공정 산포", "트림 타깃/리페어 데이터 오류"],
+      "actions": ["트림 장비 캘리브레이션 이력 확인", "웨이퍼 내 TRIM 측정값 분포(존별) 분석", "동일 장비 처리 lot 확대 검사"],
+      "severity": "medium",
+      "related": ["half_split"]
+    },
+    "site_dependent": {
+      "label_ko": "사이트 종속 불량 (멀티사이트)",
+      "aliases": ["site", "multi_site", "사이트종속"],
+      "signature": "N-사이트 병렬 테스트에서 특정 사이트 주기의 반복 패턴",
+      "process_steps": ["wafer_test"],
+      "root_causes": ["특정 사이트 니들/포고핀 불량", "테스터 채널 보드 이상", "사이트별 캘리브레이션 편차"],
+      "actions": ["사이트별 수율 분해 분석", "의심 사이트 하드웨어 점검/교체", "사이트 로테이션 재테스트로 격리"],
+      "severity": "high",
+      "related": ["open_short_cluster"]
+    },
+    "half_split": {
+      "label_ko": "반분(상하/좌우) 편중",
+      "aliases": ["half", "상하편중", "좌우편중"],
+      "signature": "웨이퍼 상/하 또는 좌/우 절반의 수율·측정값 계단식 차이",
+      "process_steps": ["wafer_test", "anneal", "deposition"],
+      "root_causes": ["척 온도 존 편차", "공정 장비 존 불균일", "테스트 순서에 따른 열적 드리프트"],
+      "actions": ["척 존별 온도 캘리브레이션", "파라메트릭 맵의 존별 평균 비교", "공정 장비 존 점검"],
+      "severity": "medium",
+      "related": ["trim_fail_cluster", "donut"]
+    },
+    "retest_recovery": {
+      "label_ko": "리테스트 회복성 fail",
+      "aliases": ["retest", "recovery", "리테스트회복"],
+      "signature": "1차 테스트 fail → 리테스트 pass 전환율이 비정상적으로 높음",
+      "process_steps": ["wafer_test"],
+      "root_causes": ["콘택 불안정(니들 오염)", "테스트 환경 순간 이상", "마지널 다이(스펙 경계)"],
+      "actions": ["니들 클리닝 주기 단축", "회복 다이의 마지널 파라미터 추적", "리테스트 기준 재검토"],
+      "severity": "low",
+      "related": ["open_short_cluster"]
+    },
+    "bin_abnormal": {
+      "label_ko": "빈 분포 이상 (웨이퍼/로트 레벨)",
+      "aliases": ["bin_abn", "bin_mix", "빈이상", "wt_abn"],
+      "signature": "특정 fail bin 비율이 기준선·인접 웨이퍼 대비 급등 (공간 패턴 없이도 발생)",
+      "process_steps": ["wafer_test", "any"],
+      "root_causes": ["테스트 프로그램/버전 변경", "프로브카드·테스터 상태 변화", "선행 공정 이력 이상(MES 대조)"],
+      "actions": ["해당 lot 홀드 및 인접 웨이퍼 bin 분포 비교", "MES 설비 이력 대조(동일 설비 처리분 격리)", "사인 계열별(OS/TRIM/HVS) 분해 후 해당 도메인 조치"],
+      "severity": "high",
+      "related": ["open_short_cluster", "trim_fail_cluster", "site_dependent"]
+    }
+  },
+  "process_steps": {
+    "cmp": {"label_ko": "화학적 기계 연마", "equipment_family": "CMP polisher"},
+    "photolithography": {"label_ko": "포토(노광)", "equipment_family": "Scanner/Stepper, Track"},
+    "etch": {"label_ko": "식각", "equipment_family": "Dry etcher"},
+    "deposition": {"label_ko": "증착", "equipment_family": "CVD/PVD/ALD"},
+    "cleaning": {"label_ko": "세정", "equipment_family": "Wet station/Scrubber"},
+    "anneal": {"label_ko": "열처리", "equipment_family": "Furnace/RTP"},
+    "wafer_handling": {"label_ko": "웨이퍼 이송", "equipment_family": "EFEM/Robot"},
+    "spin_coating": {"label_ko": "스핀 코팅", "equipment_family": "Track coater"},
+    "edge_bead_removal": {"label_ko": "EBR", "equipment_family": "Track"},
+    "environment": {"label_ko": "클린룸 환경", "equipment_family": "FFU/AMC"},
+    "wafer_test": {"label_ko": "웨이퍼 테스트(EDS/CP/FT)", "equipment_family": "Prober/Tester/Probe card"},
+    "laser_trim": {"label_ko": "레이저 트림", "equipment_family": "Laser trimmer"},
+    "any": {"label_ko": "전 공정", "equipment_family": "-"}
+  }
+}

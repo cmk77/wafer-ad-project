@@ -1,0 +1,51 @@
+# 공통 설정
+paths:
+  data_root: ./datasets            # download_datasets.sh 출력
+  fab_root: ./datasets/fab         # 사내 데이터: fab/<클래스>/{train/good,test/good,test/defect}
+  results: ./results
+  registry: ./results/defect_registry   # 신규 불량 유형 few-shot 뱅크
+  replay: ./results/replay_buffer.json
+
+wm811k:
+  pkl: ./datasets/wm811k/LSWMD.pkl
+  out: ./datasets/wm811k_png
+  image_size: 64
+
+mixedwm38:
+  npz: ./datasets/mixedwm38/Wafer_Map_Datasets.npz
+  out: ./datasets/mixedwm38_png
+
+anomaly:
+  image_size: 256
+  patchcore: {backbone: wide_resnet50_2, layers: [layer2, layer3], coreset_sampling_ratio: 0.1}
+  train_batch_size: 16
+  eval_batch_size: 16
+  num_workers: 8
+  auroc_threshold: 0.97            # 미달 클래스는 개별 PatchCore 보완
+
+registry:                          # L2: 신규 불량 유형 few-shot 등록
+  encoder: vit_base_patch14_reg4_dinov2.lvd142m
+  min_shots: 5
+  unknown_threshold: 0.55          # 코사인 유사도 미만이면 'unknown-new-defect'
+
+gemma:
+  model_id: google/gemma-4-26B-A4B-it    # 서빙 기본값(MoE, 빠름). 고품질: google/gemma-4-31B-it
+  # vLLM 서빙 시 공식 QAT 4bit 권장: google/gemma-4-31B-it-qat-w4a16-ct (bf16급 품질, ~1/4 메모리)
+  load_in_4bit: true
+  max_new_tokens: 1024
+  temperature: 1.0                 # Gemma 4 권장 샘플링
+  top_p: 0.95
+  top_k: 64
+  enable_thinking: false
+  ontology: ./data/ontology/wafer_defect_ontology.json
+
+qlora:
+  base_model: google/gemma-4-31B-it      # 48GB에서 QLoRA 가능. OOM 시 26B-A4B 또는 seq 축소
+  r: 16
+  alpha: 32
+  dropout: 0.05
+  seq_len: 2048
+  batch_size: 1
+  grad_accum: 16
+  lr: 1.0e-4
+  epochs: 2
